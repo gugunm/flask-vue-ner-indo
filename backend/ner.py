@@ -417,12 +417,14 @@ class Corpus(object):
         self.char_pad_idx = self.char_field.vocab.stoi[self.char_field.pad_token]
         self.tag_pad_idx = self.tag_field.vocab.stoi[self.tag_field.pad_token]
 
+# import os 
+# print(os.listdir())
 
 corpus = Corpus(
-    input_folder=f"./input",
+    input_folder="./backend/input/",
     min_word_freq=3,
     batch_size=64,
-    wv_file=f"./pretrained/id_ft.bin"
+    wv_file=f"./backend/pretrained/id_ft.bin"
 )
 
 # configurations building block
@@ -470,21 +472,24 @@ trainer = Trainer(
     data=corpus,
     optimizer=Adam(model.parameters(), lr=lrs[model_name], weight_decay=1e-2),  # add weight decay for Adam
     device=use_device,
-    checkpoint_path=f"./models/{model_name}.pt"
+    checkpoint_path=f"./backend/models/{model_name}.pt"
 )
 
 
 trainer.model = NERModel(**configs[model_name]).to(use_device)
-trainer.model.load_state(f"./models/{model_name}.pt")
+trainer.model.load_state(f"./backend/models/{model_name}.pt")
 
 def predictNer(sentence="TPUA Desak Jokowi Mundur, TB Hasanuddin: Jangan Halu, Mendesak Presiden Mundur Bukan Perkara Mudah"):
     words, infer_tags, unknown_tokens = trainer.infer(sentence=sentence)
 
     dictionary = dict(zip(words, infer_tags)) 
-    print("OKEEEE") 
+    # print("OKEEEE") 
     return dictionary
 
+
 predictNer()
+
+
 # print(infer_tags)
 # print(words)
 

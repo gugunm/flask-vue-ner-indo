@@ -13,6 +13,8 @@ from flask import Flask, render_template, jsonify
 app = Flask(__name__,
             static_folder="./dist/static",
             template_folder="./dist")
+
+api = Api(app)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
@@ -31,6 +33,12 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 #         return requests.get('http://localhost:8080/{}'.format(path)).text
 #     return render_template("index.html")
 
+class Status(Resource):    
+     def get(self):
+         try:
+            return {'data': 'Api running'}
+         except(error): 
+            return {'data': error}
 
 class Predict(Resource):
     def __init__(self):
@@ -40,9 +48,9 @@ class Predict(Resource):
     def get(self):
         return jsonify({'data': self.ner_result})
 
-api.add_resource(Predict, '/predict')
+api.add_resource(Predict, '/api/predict')
 
-
+api.add_resource(Status, '/')
 
 
 if __name__ == '__main__':
