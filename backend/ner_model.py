@@ -424,10 +424,10 @@ class Corpus(object):
 # print(os.listdir())
 
 # kalau pake pc di kosan
-# folder_backend = "/backend"
+folder_backend = "/backend"
 
 # kalau pake laptop pdi
-folder_backend = ""
+# folder_backend = ""
 
 corpus = Corpus(
     input_folder=f".{folder_backend}/input/",

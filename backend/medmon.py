@@ -11,16 +11,25 @@ class Medmon:
         self.passwd=config('DB_PASSWORD')
         self.db_dataframe=""
     
-    def db_connect(self):
-        # str_query = "SELECT * from data_news \
-        #         WHERE news_pubday='2021-04-19' \
-        #         ORDER BY news_pubdate DESC LIMIT 100;"
+    def db_connect(
+        self, 
+        tahun=datetime.now().year, 
+        bulan=datetime.now().month, 
+        tgl=datetime.now().day, 
+        limit=0
+    ):
 
-        str_query = "\
-            SELECT * from data_news \
-                WHERE news_pubday='{}' \
-                    ORDER BY news_pubdate DESC LIMIT 3 \
-                        ;".format(datetime.today().strftime("%Y-%m-%d"))
+        limit_query = "LIMIT {}".format(limit)
+
+        if limit != 0:
+            str_query = "\
+                SELECT * from data_news \
+                    WHERE news_pubday='{}' \
+                        {};".format(datetime(tahun, bulan, tgl).strftime("%Y-%m-%d"), limit_query)
+        else:
+            str_query = "\
+                SELECT * from data_news \
+                    WHERE news_pubday='{}';".format(datetime(tahun, bulan, tgl).strftime("%Y-%m-%d"))
         
         try:
             db_medmon = connection.connect(
