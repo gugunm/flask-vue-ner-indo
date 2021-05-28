@@ -1,7 +1,6 @@
 <template>
 <div class='page-prediction'>
   <p class='judul'>Predict NER of News Title / Content</p>
-  <!-- <p class='judul'>{{ predict.data.Hasanuddin }}</p> -->
 
   <div class="container content-prediction">
     <div class="sisi-kiri">
@@ -119,7 +118,6 @@ export default {
 }
 
 .sisi-kiri {
-  /* flex-grow: 1; */
   width: 60%;
   margin-right: 10px;
 }
@@ -178,10 +176,6 @@ export default {
   overflow: scroll;
 }
 
-/* table, td, th {
-  border: 1px solid black;
-} */
-
 .table-hasil {
   box-sizing: border-box;
   display: inline-block;
@@ -194,7 +188,6 @@ export default {
   margin: 0;
   width: 100%;
   display: inline-block;
-  /* padding: 5px 2px; */
 }
 
 .table-hasil th.name, .table-hasil th.value {
