@@ -7,7 +7,7 @@ import requests
 from flask_cors import CORS
 from random import *
 from flask_restful import Resource, Api
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 
 app = Flask(__name__,
@@ -24,12 +24,19 @@ class Status(Resource):
          except(error): 
             return {'data': error}
 
-class predictNerOfSentence(Resource):
+class PredictNerOfSentence(Resource):
     def __init__(self):
         super().__init__()
-        self.ner_result = ner.predictNerOfSentence()
+        self.ner_result = ''
 
     def get(self):
+        # self.ner_result = ner.predictNerOfSentence()
+        return jsonify({'data': self.ner_result})
+    
+    def post(self):
+        json_data = request.get_json(force=True)
+        sentence = json_data["text"]
+        self.ner_result = ner.predictNerOfSentence(sentence)
         return jsonify({'data': self.ner_result})
 
 
@@ -44,7 +51,7 @@ class PredictByDate(Resource):
         })
 
 
-api.add_resource(predictNerOfSentence, '/api/predict')
+api.add_resource(PredictNerOfSentence, '/api/predict')
 
 api.add_resource(PredictByDate, '/api/predict-by-date')
 
