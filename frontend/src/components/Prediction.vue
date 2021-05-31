@@ -11,22 +11,24 @@
     <div class="sisi-kanan">
       <p class="judul-hasil">Keyword Terkait</p>
       <div class="result-prediction">
-        <table class="table-hasil">
-          <thead>
-            <tr>
-              <th class="name">Kata</th>
-              <th class="value">Tag</th>
-            </tr>
-          </thead>
-          <div class="loading" v-if="loading === true">
-            <beat-loader :loading="loading" :color="color"></beat-loader>
-          </div>
-          <div v-else>
-            <div v-if="predict.data">
+        <div class="loading" v-if="loading === true">
+          <beat-loader :loading="loading" :color="color"></beat-loader>
+        </div>
+        <div v-else> 
+          <div v-if="predict.data">
+            <table class="table-hasil">
+              <tr>
+                <th class="idx">No</th>
+                <th class="name">Kata</th>
+                <th class="value">Tag</th>
+              </tr>
               <div v-for="(value, name, index) in predict.data" v-bind:key="index" >
                 <div v-if="value != 'O'">
                   <tr >
                     <div >
+                      <td class="idx" >
+                        {{ index+1 }}
+                      </td>
                       <td class="name" >
                         {{ name }}
                       </td>
@@ -37,9 +39,9 @@
                   </tr>
                 </div>
               </div>
-            </div>
+            </table>
           </div>
-        </table>
+        </div>
       </div>
     </div>
   </div>
@@ -181,6 +183,7 @@ export default {
   display: inline-block;
   width: 100%;
   border-collapse: collapse;
+  margin-top: 10px;
 }
 
 .table-hasil tr {
@@ -190,26 +193,33 @@ export default {
   display: inline-block;
 }
 
-.table-hasil th.name, .table-hasil th.value {
-  padding: 10px 2px;
-  display: inline-block;
+.table-hasil th.idx, .table-hasil th.name, .table-hasil th.value {
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-.table-hasil td.name, .table-hasil td.value {
+.table-hasil td, .table-hasil th {
   margin-bottom: 3px;
   box-sizing: border-box;
   padding: 3px 5px;
   display: inline-block;
   text-align: left;
+}
 
+.table-hasil td.idx, .table-hasil th.idx {
+  width: 10%;
+}
+
+.table-hasil td.idx {
+  text-align: center;
 }
 
 .table-hasil td.name, .table-hasil th.name {
-  width: 180px;
+  width: 45%;
 }
 
 .table-hasil td.value, .table-hasil th.value {
-  width: 150px;
+  width: 40%;
 }
 
 .table-hasil td.name {
