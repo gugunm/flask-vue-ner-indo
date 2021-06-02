@@ -106,9 +106,9 @@ export default {
 
 .judul {
   margin-top: 0px;
-  padding: 30px 40px;
+  padding: 30px 0px;
   text-align: left;
-  background-color: #D1E3EF;
+  /* background-color: #D1E3EF; */
   font-size: 20px;
   font-weight: bold;
 }
@@ -121,14 +121,14 @@ export default {
 .sisi-kiri,
 .sisi-kanan {
   box-sizing: border-box;
-  background-color: #D1E3EF;
-  padding: 20px 40px;
+  /* background-color: #D1E3EF; */
+  padding: 20px 0px;
   height: 450px;
 }
 
 .sisi-kiri {
   width: 60%;
-  margin-right: 10px;
+  margin-right: 40px;
 }
 
 .sisi-kanan {
@@ -156,6 +156,8 @@ export default {
   border: none;
   resize: none;
   outline: none;
+  border: 1px solid #1B2B47;
+  border-radius: 5px;
 }
 
 .btn-pediction {

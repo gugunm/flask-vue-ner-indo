@@ -143,15 +143,10 @@ export default {
       color: '#1290E4',
       date: new Date().toISOString().split('T')[0],
       newsByDate: null,
-      limit: 100
+      limit: 10
     }
   },
   methods: {
-    // limitControl () {
-    //   if (this.inputan === '' || this.inputan === 0) {
-    //     this.limit = 10
-    //   }
-    // },
     showClikedNer (idx) {
       this.idx_result = idx
     },
