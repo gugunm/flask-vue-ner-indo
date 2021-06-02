@@ -182,7 +182,7 @@ export default {
   background-color: white;
   padding: 10px;
   height: 350px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .table-hasil {

@@ -19,11 +19,9 @@ ul {
   border: 1px solid #e7e7e7;
   background-color: #f3f3f3;
 }
-
 li {
   float: left;
 }
-
 li a {
   display: block;
   color: #666;
@@ -31,11 +29,9 @@ li a {
   padding: 18px 25px;
   text-decoration: none;
 }
-
 li a:hover:not(.active) {
   background-color: #ddd;
 }
-
 .router-link-active {
   color: white;
   background-color: #1B2B47 !important;

@@ -47,11 +47,13 @@ class PredictByDate(Resource):
 
     def get(self):
         tgl = request.args.get('tgl')
+        limit = request.args.get('limit')
         tgl_split = tgl.split('-')
         self.ner_result_bydate = ner.predictByDate(
             tahun=tgl_split[0],
             bulan=tgl_split[1],
-            tgl=tgl_split[2]
+            tgl=tgl_split[2],
+            limit=limit
         )
         return jsonify({
             'data': self.ner_result_bydate
