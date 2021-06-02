@@ -1,12 +1,22 @@
 <template>
 <div class='page-prediction'>
-  <p class='judul'>Predict NER of News Title / Content</p>
+  <p class='judul'>Auto Prediction News By Date</p>
 
   <div class="container content-prediction">
     <div class="sisi-kiri">
-      <p class="judul-input-prediciton">Tuliskan judul / konten berita</p>
-      <textarea v-model="inputan" id="" name="input-prediction" rows="10" cols="50" class="input-prediction" @keyup="textControl"></textarea>
-      <input type="button" value="Predict Content" class="btn-pediction" @click="getPredict">
+      <p class="judul-input-prediciton">Pilih Tanggal</p>
+      <date-picker 
+        class="date-picker" 
+        v-model="date" 
+        value-type="format" 
+        format="YYYY-MM-DD"
+        @change="getNewsData">
+      </date-picker>
+    </div>
+    <div class="sisi-tengah">
+      <p class="judul-input-prediciton">Berita</p>
+      <p>{{ date }}</p>
+      <p v-if="newsByDate != null">{{ newsByDate.data.berita }}</p>
     </div>
     <div class="sisi-kanan">
       <p class="judul-hasil">Keyword Terkait</p>
@@ -18,7 +28,6 @@
           <div v-if="predict.data">
             <table class="table-hasil">
               <tr>
-                <!-- <th class="idx">No</th> -->
                 <th class="name">Kata</th>
                 <th class="value">Tag</th>
               </tr>
@@ -26,9 +35,6 @@
                 <div v-if="value != 'O'">
                   <tr>
                     <div>
-                      <!-- <td class="idx">
-                        {{ counter }}
-                      </td> -->
                       <td class="name">
                         {{ name }}
                       </td>
@@ -52,25 +58,33 @@
 import axios from 'axios'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import BeatLoader from 'vue-spinner/src/BeatLoader.vue'
+import DatePicker from 'vue2-datepicker'
+import 'vue2-datepicker/index.css'
 
 export default {
   components: {
     PulseLoader,
-    BeatLoader
+    BeatLoader,
+    DatePicker
   },
   data () {
     return {
       predict: {},
       inputan: '',
       loading: false,
-      color: '#1290E4'
-      // counter: 0
+      color: '#1290E4',
+      date: '2019-10-09',
+      newsByDate: null
     }
   },
   methods: {
-    // addCounter() {
-    //   this.counter += 1
-    // },
+    getNewsData () {
+      this.newsByDate = {
+        data: {
+          berita: 'KPK hari ini'
+        }
+      }
+    },
     textControl () {
       if (this.inputan === '') {
         this.predict = {}
@@ -106,9 +120,9 @@ export default {
 
 .judul {
   margin-top: 0px;
-  padding: 30px 40px;
+  padding: 30px 0px;
   text-align: left;
-  background-color: #D1E3EF;
+  /* background-color: #D1E3EF; */
   font-size: 20px;
   font-weight: bold;
 }
@@ -118,27 +132,42 @@ export default {
   display: flex;
 }
 
-.sisi-kiri,
+.sisi-tengah,
 .sisi-kanan {
   box-sizing: border-box;
   background-color: #D1E3EF;
-  padding: 20px 40px;
-  height: 450px;
 }
 
 .sisi-kiri {
-  width: 60%;
+  box-sizing: border-box;
+  width: 20%;
   margin-right: 10px;
+  height: 400px;
+  padding: 20px 40px;
+}
+
+.sisi-tengah {
+  padding: 20px 40px;
+  width: 40%;
+  height: 600px;
 }
 
 .sisi-kanan {
-  width: 40%;
+  padding: 20px 40px;
+  width: 35%;
   margin-left: 10px;
+  height: 600px;
 }
 
 .sisi-kanan p {
   margin-top: 0;
 }
+
+.date-picker {
+  display: block;
+  width: 100%;
+}
+
 
 .judul-input-prediciton {
   font-size: 18px;
@@ -179,9 +208,9 @@ export default {
 }
 
 .result-prediction {
-  background-color: white;
+  /* background-color: white; */
   padding: 10px;
-  height: 350px;
+  height: 500px;
   overflow: scroll;
 }
 
