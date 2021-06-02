@@ -22,22 +22,20 @@
                 <th class="name">Kata</th>
                 <th class="value">Tag</th>
               </tr>
-              <div v-for="(value, name, index) in predict.data" v-bind:key="index">
-                <div v-if="value != 'O'">
+              <!-- <div v-for="(value, name, index) in predict.data" v-bind:key="index"> -->
+              <div v-for="(d, index) in predict.data" v-bind:key="index">
+                <!-- <div v-if="d.tag != 'O'"> -->
                   <tr>
                     <div>
-                      <!-- <td class="idx">
-                        {{ counter }}
-                      </td> -->
                       <td class="name">
-                        {{ name }}
+                        {{ d.word }}
                       </td>
                       <td class="value">
-                        {{ value.split("-")[1] }}
+                        {{ d.tag != 'O' ? d.tag.split("-")[1] : '-' }}
                       </td>
                     </div>
                   </tr>
-                </div>
+                <!-- </div> -->
               </div>
             </table>
           </div>
@@ -86,8 +84,10 @@ export default {
         text: this.inputan
       })
       .then(response => {
-        this.predict = JSON.parse(JSON.stringify(response.data))
+        // this.predict = JSON.parse(JSON.stringify(response.data))
+        this.predict = response.data
         this.loading = false
+        console.log(this.predict)
       })
       .catch(error => {
         console.log(error)

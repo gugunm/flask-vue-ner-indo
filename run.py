@@ -3,11 +3,10 @@ import sys
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, './backend')
 import ner
-import requests
 from flask_cors import CORS
 from random import *
 from flask_restful import Resource, Api
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, jsonify, request
 
 
 app = Flask(__name__,
@@ -43,11 +42,19 @@ class PredictNerOfSentence(Resource):
 class PredictByDate(Resource):
     def __init__(self):
         super().__init__()
-        self.ner_by_date = ner.predictByDate()
+        self.ner_result_bydate = ''
+        # self.ner_by_date = ner.predictByDate()
 
     def get(self):
+        tgl = request.args.get('tgl')
+        tgl_split = tgl.split('-')
+        self.ner_result_bydate = ner.predictByDate(
+            tahun=tgl_split[0],
+            bulan=tgl_split[1],
+            tgl=tgl_split[2]
+        )
         return jsonify({
-            'data': self.ner_by_date
+            'data': self.ner_result_bydate
         })
 
 

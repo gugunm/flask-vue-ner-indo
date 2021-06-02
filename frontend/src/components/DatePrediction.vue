@@ -10,13 +10,37 @@
         v-model="date" 
         value-type="format" 
         format="YYYY-MM-DD"
-        @change="getNewsData">
+        :disabled-date="disabledAfterToday"
+        >
       </date-picker>
+      <div class="btn-kiri">
+        <input 
+          type="button" 
+          class="btn-run" 
+          value="Run"
+          @click="getPredictByDate"
+        >
+        <input 
+          type="button" 
+          class="btn-reset" 
+          value="Reset"
+        >
+      </div>
     </div>
     <div class="sisi-tengah">
       <p class="judul-input-prediciton">Berita</p>
-      <p>{{ date }}</p>
-      <p v-if="newsByDate != null">{{ newsByDate.data.berita }}</p>
+      <div v-if="predict.data">
+        <div v-for="(news, index) in predict.data.news" :key="index">
+          <div 
+            class="card"
+            @click="showClikedNer(index)"
+          >
+            <p>{{ news.media }}</p>
+            <p>{{ news.pubday }}</p>
+            <p>{{ news.title }}</p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="sisi-kanan">
       <p class="judul-hasil">Keyword Terkait</p>
@@ -31,19 +55,19 @@
                 <th class="name">Kata</th>
                 <th class="value">Tag</th>
               </tr>
-              <div v-for="(value, name, index) in predict.data" v-bind:key="index">
-                <div v-if="value != 'O'">
+              <div v-for="(d, index) in predict.data.news[idx_result].ner_title" v-bind:key="index">
+                <!-- <div v-if="value != 'O'"> -->
                   <tr>
                     <div>
                       <td class="name">
-                        {{ name }}
+                        {{ d.word }}
                       </td>
                       <td class="value">
-                        {{ value.split("-")[1] }}
+                        {{ d.tag != 'O' ? d.tag.split("-")[1] : '-' }}
                       </td>
                     </div>
                   </tr>
-                </div>
+                <!-- </div> -->
               </div>
             </table>
           </div>
@@ -70,38 +94,41 @@ export default {
   data () {
     return {
       predict: {},
+      idx_result: 0,
       inputan: '',
       loading: false,
       color: '#1290E4',
-      date: '2019-10-09',
+      date: new Date().toISOString().split('T')[0],
       newsByDate: null
     }
   },
   methods: {
-    getNewsData () {
-      this.newsByDate = {
-        data: {
-          berita: 'KPK hari ini'
-        }
-      }
+    showClikedNer (idx) {
+      this.index = idx
     },
-    textControl () {
-      if (this.inputan === '') {
-        this.predict = {}
-      }
+    disabledAfterToday (date) {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+
+      return date > new Date(today.getTime())
     },
-    getPredict () {
+    getPredictByDate () {
       this.loading = true
-      this.predict = this.getPredictionFromBackend(this.inputan)
+      this.predict = this.getPredictionFromBackend(this.date)
     },
     getPredictionFromBackend () {
-      const path = `http://127.0.0.1:5000/api/predict`
-      return axios.post(path, {
-        text: this.inputan
+      const path = `http://127.0.0.1:5000/api/predict-by-date`
+      return axios.get(path, {
+        params: {
+          tgl: this.date
+        }
       })
       .then(response => {
-        this.predict = JSON.parse(JSON.stringify(response.data))
+        // this.predict = JSON.parse(JSON.stringify(response.data))
+        this.predict = response.data
         this.loading = false
+        console.log('DATAAAA')
+        console.log(response.data)
       })
       .catch(error => {
         console.log(error)
@@ -168,36 +195,50 @@ export default {
   width: 100%;
 }
 
-
-.judul-input-prediciton {
-  font-size: 18px;
-  margin-top: 0;
-  text-align: left;
+.btn-kiri {
+  margin-top: 10px;
 }
 
-.input-prediction {
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: 16px;
-  padding: 20px;
-  width: 100%;
-  height: 300px;
-  border: none;
-  resize: none;
-  outline: none;
-}
-
-.btn-pediction {
-  float: right;
-  margin-top: 15px;
-  box-sizing: border-box;
-  padding: 15px 30px;
+.btn-run,
+.btn-reset {
+  width: 130px; 
+  padding: 10px;
   cursor: pointer;
-  border: none;
-  font-size: 14px;
-  background-color: #1B2B47;
-  color: white;
+  margin-bottom: 5px;
 }
+
+.btn-run {
+  background-color: #1B2B47;
+  border-color: #1B2B47;
+  color: white;
+  border-radius: 3px;
+}
+
+.btn-run:hover {
+  background-color: #284069;
+  border-color: #284069;
+  border-radius: 3px;
+}
+
+.btn-reset {
+  background-color: white;
+  border-color: #1B2B47;
+  color: #1B2B47;
+  border-radius: 3px;
+}
+
+.btn-reset:hover {
+  background-color: #D1E3EF;
+}
+
+
+/* SISI TENGAAH */
+.card {
+  background-color: white;
+  cursor: pointer;
+}
+
+
 
 .judul-hasil {
   text-align: left;
@@ -208,7 +249,7 @@ export default {
 }
 
 .result-prediction {
-  /* background-color: white; */
+  background-color: white;
   padding: 10px;
   height: 500px;
   overflow: scroll;
@@ -273,4 +314,5 @@ export default {
   background-color: #D1E3EF;
   border: 1px solid #D1E3EF;
 }
+
 </style>

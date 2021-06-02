@@ -19,8 +19,17 @@ def cleanhtml(raw_html):
 def predictNerOfSentence(sentence="TPUA Desak Jokowi Mundur, TB Hasanuddin: Jangan Halu, Mendesak Presiden Mundur Bukan Perkara Mudah"):
     words, infer_tags, unknown_tokens = trainer.infer(sentence=sentence)
 
-    ner_dict = dict(zip(words, infer_tags)) 
-    return ner_dict
+    # ner_dict = dict(zip(words, infer_tags)) 
+    # return ner_dict
+    arr_result = []
+    for i, word in enumerate(words):
+        arr_result.append(
+            {
+                "word": word,
+                "tag": infer_tags[i]
+            }
+        )
+    return arr_result
 
 # =======  Predict berita secara otomatis ==========
 def predictByDate(
@@ -36,25 +45,37 @@ def predictByDate(
     mdmon = Medmon()
     # get dataframe news
     df_medmon = mdmon.db_connect(
-        tahun=tahun,
-        bulan=bulan,
-        tgl=tgl,
+        tahun=int(tahun),
+        bulan=int(bulan),
+        tgl=int(tgl),
         limit=limit
     )
 
     for index, row in df_medmon.iterrows():
         # get news content and clean it 
         row['news_content'] = cleanhtml(row['news_content'])
+        row['news_title'] = cleanhtml(row['news_title'])
         # predict ner of news content
-        ner_dict_result = predictNerOfSentence(row['news_content'])
+        ner_content_result = predictNerOfSentence(row['news_content'])
+        ner_title_result = predictNerOfSentence(row['news_title'])
         # create a json
-        list_ner_dict.append(ner_dict_result)
+        list_ner_dict.append(
+            {
+                "title": row['news_title'],
+                "content": row['news_content'],
+                "ner_title": ner_title_result,
+                "ner_content": ner_content_result,
+                "media": row['news_media'],
+                "pubday": row['news_pubday'],
+                "url": row['news_url']
+            }
+        )
         # print(ner_dict_result)
         # break
 
     # create json for its date of pubdate
     news_json_by_pubdate = {
-        "pubdate": "{}-{}-{}".format(tahun, bulan, tgl),
+        # "pubdate": "{}-{}-{}".format(tahun, bulan, tgl),
         "news": list_ner_dict
     }
 
