@@ -5,8 +5,22 @@
   <div class="container content-prediction">
     <div class="sisi-kiri">
       <p class="judul-input-prediciton">Tuliskan judul / konten berita</p>
-      <textarea v-model="inputan" id="" name="input-prediction" rows="10" cols="50" class="input-prediction" @keyup="textControl"></textarea>
-      <input type="button" value="Predict Content" class="btn-pediction" @click="getPredict">
+      <textarea 
+      v-model="inputan" 
+      id="" 
+      name="input-prediction" 
+      rows="10" 
+      cols="50" 
+      class="input-prediction" 
+      @keyup.ctrl.enter="getPredict"
+      @keydown="textControl"
+      ></textarea>
+      <input 
+      type="button" 
+      value="Predict Content" 
+      class="btn-pediction" 
+      @click="getPredict" 
+      >
     </div>
     <div class="sisi-kanan">
       <p class="judul-hasil">Keyword Terkait</p>
@@ -39,6 +53,9 @@
               </div>
             </table>
           </div>
+          <div v-else>
+            <p style="font-size:14px; text-align:center; padding-top:20px;"><i>belum ada hasil prediksi</i></p>
+          </div>
         </div>
       </div>
     </div>
@@ -61,7 +78,7 @@ export default {
       predict: {},
       inputan: '',
       loading: false,
-      color: '#1290E4'
+      color: '#1B2B47'
       // counter: 0
     }
   },
@@ -170,10 +187,17 @@ export default {
   font-size: 14px;
   background-color: #1B2B47;
   color: white;
+  border-radius: 5px;
+}
+
+.btn-pediction:hover {
+  background-color: #284069;
+  border-color: #284069;
 }
 
 .judul-hasil {
   text-align: left;
+  padding-left: 5px;
 }
 
 .loading {
@@ -181,8 +205,7 @@ export default {
 }
 
 .result-prediction {
-  background-color: white;
-  padding: 10px;
+  /* background-color: white; */
   height: 350px;
   overflow: auto;
 }
@@ -192,7 +215,6 @@ export default {
   display: inline-block;
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
 }
 
 .table-hasil tr {
@@ -229,21 +251,22 @@ export default {
 
 .table-hasil td.name,
 .table-hasil th.name {
-  width: 45%;
+  width: 49%;
 }
 
 .table-hasil td.value,
 .table-hasil th.value {
-  width: 40%;
+  width: 49%;
 }
 
 .table-hasil td.name {
   box-sizing: border-box;
-  border: 1px solid #D1E3EF;
+  border: 1px solid #1B2B47;
 }
 
 .table-hasil td.value {
-  background-color: #D1E3EF;
-  border: 1px solid #D1E3EF;
+  background-color: #1B2B47;
+  border: 1px solid #1B2B47;
+  color: white;
 }
 </style>

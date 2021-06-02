@@ -4,7 +4,7 @@
       <li><router-link to="/" exact>Home</router-link></li>
       <li><router-link to="/prediction">Prediction</router-link></li>
       <li><router-link to="/date-prediction">Date Prediction</router-link></li>
-      <li><router-link to="/about">About</router-link></li>
+      <!-- <li><router-link to="/about">About</router-link></li> -->
     </ul>
   </div>
 </template>

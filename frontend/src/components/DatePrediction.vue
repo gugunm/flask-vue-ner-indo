@@ -28,6 +28,7 @@
           type="button" 
           class="btn-reset" 
           value="Reset"
+          @click="resetData"
         >
       </div>
     </div>
@@ -56,34 +57,42 @@
           </a>
         </div>
       </div> -->
-      <div v-if="predict.data" class="list-berita">
-        <div v-for="(news, idx) in predict.data.news" :key="idx">
-          <div 
-            class="card"
-            @click="showClikedNer(idx)"
-          >
-            <div class="card-media">
-              <span class="icon-media">
-                <i class="fas fa-user-edit fa-sm"></i>
-              </span>
-              <p>{{ news.media }}</p>
-            </div>
-            <p class="card-judul">{{ news.title }}</p>
-            <div class="card-bottom">
-              <div class="card-pubday">
-                <span class="icon-clock">
-                  <i class="far fa-clock fa-sm"></i>
+      <div class="loading" v-if="loading === true">
+        <beat-loader :loading="loading" :color="color"></beat-loader>
+      </div>
+      <div v-else>
+        <div v-if="predict.data" class="list-berita">
+          <div v-for="(news, idx) in predict.data.news" :key="idx">
+            <div 
+              class="card"
+              @click="showClikedNer(idx)"
+            >
+              <div class="card-media">
+                <span class="icon-media">
+                  <i class="fas fa-user-edit fa-sm"></i>
                 </span>
-                <p>{{ news.pubday }}</p>
+                <p>{{ news.media }}</p>
               </div>
-              <a class="card-link" :href="news.url" target="_blank">
-                <span>
-                  <i class="fas fa-link"></i>
-                </span>
-                <p>Source link</p>
-              </a>
+              <p class="card-judul">{{ news.title }}</p>
+              <div class="card-bottom">
+                <div class="card-pubday">
+                  <span class="icon-clock">
+                    <i class="far fa-clock fa-sm"></i>
+                  </span>
+                  <p>{{ news.pubday }}</p>
+                </div>
+                <a class="card-link" :href="news.url" target="_blank">
+                  <span>
+                    <i class="fas fa-link"></i>
+                  </span>
+                  <p>Source link</p>
+                </a>
+              </div>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <p style="font-size:14px; text-align:center; padding-top:40px;"><i>pilih tanggal, tentukan jumlah berita lalu klik run</i></p>
         </div>
       </div>
     </div>
@@ -114,6 +123,9 @@
               </div>
             </div>
           </table>
+          <div v-else>
+            <p style="font-size:14px; text-align:center; padding-top:40px;"><i>belum memilih berita</i></p>
+          </div>
         </div>
       </div>
     </div>
@@ -140,13 +152,18 @@ export default {
       idx_result: 0,
       inputan: '',
       loading: false,
-      color: '#1290E4',
+      color: '#1B2B47',
       date: new Date().toISOString().split('T')[0],
       newsByDate: null,
       limit: 10
     }
   },
   methods: {
+    resetData () {
+      this.predict = {}
+      this.limit = 10
+      this.date = new Date().toISOString().split('T')[0]
+    },
     showClikedNer (idx) {
       this.idx_result = idx
     },
@@ -201,6 +218,11 @@ export default {
   box-sizing: border-box;
   display: flex;
 }
+
+.loading {
+  padding-top: 40px;
+}
+
 /* ========= */
 
 .sisi-tengah,
@@ -286,6 +308,10 @@ export default {
   padding: 20px 20px;
   width: 40%;
   height: 600px;
+}
+
+.judul-tengah {
+  margin-bottom: 10px !important;
 }
 
 .list-berita {
@@ -382,9 +408,6 @@ a {
   margin-bottom: 10px;
 }
 
-.loading {
-  margin-top: 50px;
-}
 
 .result-prediction {
   height: 500px;
