@@ -178,7 +178,7 @@ export default {
       this.predict = this.getPredictionFromBackend(this.date)
     },
     getPredictionFromBackend () {
-      const path = `http://127.0.0.1:5000/api/predict-by-date`
+      const path = `http://192.168.75.145:5000/api/predict-by-date`
       return axios.get(path, {
         params: {
           tgl: this.date,

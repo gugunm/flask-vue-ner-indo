@@ -96,7 +96,7 @@ export default {
       this.predict = this.getPredictionFromBackend(this.inputan)
     },
     getPredictionFromBackend () {
-      const path = `http://127.0.0.1:5000/api/predict`
+      const path = `http://192.168.75.145:5000/api/predict`
       return axios.post(path, {
         text: this.inputan
       })
